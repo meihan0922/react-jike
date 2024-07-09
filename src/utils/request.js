@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken } from "./token";
 
 // 根域名設置
 // 超時處理
@@ -10,6 +11,8 @@ const request = axios.create({
 // 攔截器
 request.interceptors.request.use(
   (config) => {
+    const token = getToken();
+    if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (err) => Promise.reject(err)

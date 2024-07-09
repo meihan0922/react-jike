@@ -1,9 +1,16 @@
-import { Card, Form, Input, Button } from "antd";
+import { Card, Form, Input, Button, message } from "antd";
 import logo from "@/assets/logo.png";
+import { login } from "@/store/user";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const onFinish = (val) => {
-    console.log(val);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const onFinish = async (val) => {
+    await dispatch(login(val));
+    navigate("/");
+    message.success("登入成功");
   };
 
   return (
@@ -23,12 +30,13 @@ const Login = () => {
                 message: "請輸入手機號碼",
               },
               {
-                pattern: /^09\d{8}$/,
+                // pattern: /^09\d{8}$/,
+                pattern: /^1[3-9]\d{9}$/,
                 message: "請輸入正確的手機",
               },
             ]}
           >
-            <Input placeholder="請輸入手機號碼" maxLength={11} />
+            <Input placeholder="請輸入手機號碼 13800000002" maxLength={11} />
           </Form.Item>
           <Form.Item
             name="code"
@@ -39,7 +47,7 @@ const Login = () => {
               },
             ]}
           >
-            <Input placeholder="請輸入驗證碼" />
+            <Input placeholder="請輸入驗證碼 246810" />
           </Form.Item>
           <Button
             type="primary"
