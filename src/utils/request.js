@@ -1,5 +1,6 @@
 import axios from "axios";
-import { getToken } from "./token";
+import { getToken, removeToken } from "./token";
+import router from "@/router";
 
 // 根域名設置
 // 超時處理
@@ -23,7 +24,14 @@ request.interceptors.response.use(
     return res.data;
   },
   // 200 以外的設置
-  (err) => Promise.reject(err)
+  (err) => {
+    if (err.response.status === 401) {
+      removeToken();
+      router.navigate("/login");
+      window.location.reload();
+    }
+    return Promise.reject(err);
+  }
 );
 
 export { request };
