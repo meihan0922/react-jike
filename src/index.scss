@@ -2,5 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+html,
+body,
+#root {
+  height: 100%;
+}
+.login-page {
+  background-image: url("~@/assets/login.png");
+}
+.ant-layout {
+  height: 100%;
+}
+.ant-layout-header {
+  padding: 0 !important;
+}
+.publish-quill {
+  .ql-editor {
+    min-height: 300px;
+  }
 }

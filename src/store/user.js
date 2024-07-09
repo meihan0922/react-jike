@@ -1,21 +1,35 @@
-import { getToken, request, setToken as setLocalStorageToken } from "@/utils";
+import {
+  getToken,
+  removeToken,
+  request,
+  setToken as setLocalStorageToken,
+} from "@/utils";
 import { createSlice } from "@reduxjs/toolkit";
 
 const userStore = createSlice({
   name: "user",
   initialState: {
     token: getToken() || "",
+    userInfo: {},
   },
   reducers: {
     setToken(state, action) {
       state.token = action.payload;
       setLocalStorageToken(action.payload);
     },
+    setUserInfo(state, action) {
+      state.userInfo = action.payload;
+    },
+    logout(state, action) {
+      state.userInfo = {};
+      state.token = "";
+      removeToken();
+    },
   },
 });
 
 const reducer = userStore.reducer;
-const { setToken } = userStore.actions;
+const { setToken, setUserInfo, logout } = userStore.actions;
 
 function login(data) {
   return async (dispatch) => {
@@ -23,6 +37,12 @@ function login(data) {
     dispatch(setToken(res.data.token));
   };
 }
+function fetchUserInfo() {
+  return async (dispatch) => {
+    const res = await request.get("/user/profile");
+    dispatch(setUserInfo(res.data));
+  };
+}
 
-export { login };
+export { login, fetchUserInfo, logout };
 export default reducer;
