@@ -1,7 +1,7 @@
+import { getProfileAPI, loginAPI } from "@/apis/user";
 import {
   getToken,
   removeToken,
-  request,
   setToken as setLocalStorageToken,
 } from "@/utils";
 import { createSlice } from "@reduxjs/toolkit";
@@ -33,13 +33,13 @@ const { setToken, setUserInfo, logout } = userStore.actions;
 
 function login(data) {
   return async (dispatch) => {
-    const res = await request.post("/authorizations", data);
+    const res = await loginAPI(data);
     dispatch(setToken(res.data.token));
   };
 }
 function fetchUserInfo() {
   return async (dispatch) => {
-    const res = await request.get("/user/profile");
+    const res = await getProfileAPI();
     dispatch(setUserInfo(res.data));
   };
 }
